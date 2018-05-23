@@ -34,6 +34,9 @@
 </header>
 
 <style>
+
+
+
 .banner .container {
   border-bottom: 1px solid #4a4a4a; 
   margin-bottom: 16px;
@@ -42,8 +45,11 @@
 .site-brand img{
   max-height: 60px;
   max-width: 100%;
-  padding: 0 16px;
   transform: translateY(25%);
+}
+
+.site-meta {
+  padding: 15px;
 }
 
 .social-icons li {
@@ -52,10 +58,10 @@
 
 .social-icons {
   float: right;
+  margin-bottom: 16px;
 }
 
 .site-contact {
-  padding: 15px;
   float: right;
   text-align: right;
   clear: both;
@@ -133,7 +139,25 @@
   margin-bottom: 16px;
 }
 
-.nav-primary {
+@media (max-width: 575px) {
+  .site-meta .social-icons {
+    text-align: center !important;
+  }
+  .site-meta .social-icons {
+    float: none;
+  }
+}
+
+@media (max-width: 767px) {
+
+}
+
+
+@media (max-width: 991px) {
+
+}
+
+@media (max-width: 1199px) {
 
 }
 </style>
