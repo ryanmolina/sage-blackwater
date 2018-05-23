@@ -140,11 +140,17 @@
 }
 
 @media (max-width: 575px) {
-  .site-meta .social-icons {
-    text-align: center !important;
+  .site-meta .social-icons,
+  .site-meta .site-contact {
+    text-align: center;
   }
   .site-meta .social-icons {
     float: none;
+  }
+
+  .social-icons li {
+    float: none;
+    display: inline;
   }
 }
 
