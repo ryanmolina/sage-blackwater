@@ -6,6 +6,9 @@
     ],
     "customizer": [
       "./scripts/customizer.js"
+    ],
+    "admin": [
+      "./scripts/admin.js"
     ]
   },
   "publicPath": "/app/themes/sage",
