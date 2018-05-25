@@ -38,7 +38,7 @@ if (version_compare('4.7.0', get_bloginfo('version'), '>=')) {
  * Ensure dependencies are loaded
  */
 if (!class_exists('Roots\\Sage\\Container')) {
-    if (!file_exists($composer = __DIR__.'/../vendor/autoload.php')) {
+    if (!file_exists($composer = __DIR__ . '/../vendor/autoload.php')) {
         $sage_error(
             __('You must run <code>composer install</code> from the Sage directory.', 'sage'),
             __('Autoloader not found.', 'sage')
@@ -85,8 +85,189 @@ array_map(
 Container::getInstance()
     ->bindIf('config', function () {
         return new Config([
-            'assets' => require dirname(__DIR__).'/config/assets.php',
-            'theme' => require dirname(__DIR__).'/config/theme.php',
-            'view' => require dirname(__DIR__).'/config/view.php',
+            'assets' => require dirname(__DIR__) . '/config/assets.php',
+            'theme' => require dirname(__DIR__) . '/config/theme.php',
+            'view' => require dirname(__DIR__) . '/config/view.php',
         ]);
     }, true);
+
+/**
+ *  Custom Post-Type
+ */
+add_action('init', function () {
+    $types = array(
+        array(
+            'type' => 'cottage',
+            'singular' => 'Cottage',
+            'plural' => 'Cottages',
+        ),
+        array(
+            'type' => 'room',
+            'singular' => 'Room',
+            'plural' => 'Rooms',
+        ),
+    );
+
+    foreach ($types as $t) {
+        $type = $t['type'];
+        $singular = $t['singular'];
+        $plural = $t['plural'];
+
+        $labels = array(
+            'name' => $plural,
+            'singular_name' => $singular,
+            'add_new' => 'Add New',
+            'add_new_item' => 'Add New',
+            'edit_item' => 'Edit',
+            'new_item' => 'New',
+            'view_item' => 'View',
+            'search_item' => 'Search',
+            'not_found' => 'No ' . $plural . ' found',
+            'not_found_in_trash' => 'No ' . $plural . ' in trash',
+            'parent_item_colon' => '',
+        );
+
+        $args = array(
+            'labels' => $labels,
+            'public' => true,
+            'has_archives' => false,
+            'menu_icon' => 'dashicons-laptop',
+            'publicly_queryable' => true,
+            'query_var' => true,
+            'shows_in_nav_menus' => true,
+            'rewrite' => true,
+            'show_ui' => true,
+            'capability_type' => 'post',
+            'hierarchical' => true,
+            'supports' => array(
+                'title',
+                'editor',
+                'thumbnail',
+                'excerpt',
+            ),
+            'menu_position' => 5,
+        );
+        register_post_type($type, $args);
+    }
+});
+
+add_action('admin_menu', function () {
+    remove_meta_box('authordiv', 'cottage', 'normal');
+    remove_meta_box('commentstatusdiv', 'cottage', 'normal');
+    remove_meta_box('commentsdiv', 'cottage', 'normal');
+    remove_meta_box('postcustom', 'cottage', 'normal');
+    remove_meta_box('postexcerpt', 'cottage', 'normal');
+    remove_meta_box('revisionsdiv', 'cottage', 'normal');
+    remove_meta_box('slugdiv', 'cottage', 'normal');
+    remove_meta_box('trackbacksdiv', 'cottage', 'normal');
+    remove_meta_box('editor', 'cottage', 'normal');
+    remove_post_type_support( 'cottage', 'editor' );
+});
+
+function show_upload_image_meta_box() {
+    global $post;
+    $meta_box_value = get_post_meta($post->ID, 'upload_image', true);
+    echo '<input type="hidden" name="custom_meta_box_nonce" value="'.wp_create_nonce(basename(__FILE__)).'" />';
+    echo '<input id="upload_image" type="text" size="36" name="upload_image" value="'.$meta_box_value.'"/>
+          <input id="upload_image_button" type="button" value="Upload Image" />
+          <div>
+            <img id="upload_image_preview" src="'.$meta_box_value.'" onerror="this.style.display=none" style="max-width: 480px">
+          </div>';
+}
+
+add_action('add_meta_boxes', function () {
+    add_meta_box(
+        'cottage-upload_image',
+        'Image',
+        'show_upload_image_meta_box',
+        'cottage'
+    );
+});
+
+
+function save_cottage ($post_id) {
+    if (!isset($_POST['custom_meta_box_nonce'])) return;
+
+    // verify nonce
+    if (!wp_verify_nonce($_POST['custom_meta_box_nonce'], basename(__FILE__)))
+        return $post_id;
+    // check autosave
+    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE)
+        return $post_id;
+    // check permissions
+    if ('page' == $_POST['post_type'] || 'post' == $_POST['post_type']) {
+        if (!current_user_can('edit_page', $post_id))
+            return $post_id;
+        } elseif (!current_user_can('edit_post', $post_id)) {
+            return $post_id;
+    }
+    save_custom_meta_data($post_id, 'upload_image');
+}
+add_action('save_post', 'save_cottage');
+
+
+function save_custom_meta_data($post_id, $field_id) {
+    $old = get_post_meta($post_id, $field_id, true);
+    $new = $_POST[$field_id];
+    if ($new && $new != $old) {
+        update_post_meta($post_id, $field_id, $new);
+    } elseif ('' == $new && $old) {
+        delete_post_meta($post_id, $field_id, $old); 
+    }
+}
+
+add_action('add_meta_boxes', function () {
+    global $post;
+
+    if ( ! empty($post) ) {
+        $template = get_post_meta($post->ID, '_wp_page_template', true);
+        if ($template == 'views/template-grid.blade.php') {
+            add_meta_box(
+                'selected_post_type_meta',
+                'Post type to display',
+                'show_post_type_radio_button',
+                'page',
+                'normal',
+                'high'
+            );
+        } 
+    }
+});
+
+function show_post_type_radio_button () {
+    global $post;
+    $meta_box_value = get_post_meta($post->ID, 'selected_cpt', true);
+    echo '<input type="hidden" name="custom_meta_box_nonce" value="'.wp_create_nonce(basename(__FILE__)).'" />';
+    echo '
+        <fieldset id="post_type_radio_button">
+            <div>
+                <input id="selected_cpt" type="radio" value="cottage" name="selected_cpt" '.($meta_box_value == 'cottage' ? 'checked' : '').'>
+                <label>Cottage</label>
+            </div>
+            <div>
+                <input id="selected_cpt" type="radio" value="room" name="selected_cpt" '.($meta_box_value == 'room' ? 'checked' : '').'>
+                <label>Room</label>
+            </div>
+        </fieldset>
+    ';
+ }
+
+function save_selected_cpt ($post_id) {
+    if (!isset($_POST['custom_meta_box_nonce'])) return;
+
+    // verify nonce
+    if (!wp_verify_nonce($_POST['custom_meta_box_nonce'], basename(__FILE__)))
+        return $post_id;
+    // check autosave
+    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE)
+        return $post_id;
+    // check permissions
+    if ('page' == $_POST['post_type'] || 'post' == $_POST['post_type']) {
+        if (!current_user_can('edit_page', $post_id))
+            return $post_id;
+        } elseif (!current_user_can('edit_post', $post_id)) {
+            return $post_id;
+    }
+    save_custom_meta_data($post_id, 'selected_cpt');
+}
+add_action('save_post', 'save_selected_cpt');
