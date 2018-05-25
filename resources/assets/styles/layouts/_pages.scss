@@ -1,0 +1,87 @@
+.front-page-intro {
+  margin: 64px 0;
+}
+
+.quote {
+  position: relative;
+
+  .quote-bubble {
+    display: inline-block;
+    position: relative;
+    background-color: lightyellow;
+    border-radius: 30px;
+
+    .quote-text {
+      padding: 1em;
+      text-align: left;
+      line-height: 1.5em;
+
+      &::after {
+        content: ' ';
+        position: absolute;
+        width: 0;
+        height: 0;
+        left: 15px;
+        right: auto;
+        top: auto;
+        bottom: -20px;
+        border: 20px solid;
+        border-color: lightyellow lightyellow transparent transparent;
+      }
+    }
+  }
+
+  .quote-author {
+    position: absolute;
+    bottom: -25px;
+    left: 60px;
+  }
+}
+
+.button-card {
+  position: relative;
+
+  img {
+    width: 100%;
+    height: auto;
+  }
+
+  button {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+  }
+
+  &::before {
+    content: "";
+    display: block;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(32, 36, 86, 0.5);
+    -moz-transition: background 0.3s linear;
+    -webkit-transition: background 0.3s linear;
+    -o-transition: background 0.3s linear;
+    transition: background 0.3s linear;
+  }
+}
+
+.owl-carousel {
+  border-bottom: 1px solid #4a4a4a;
+}
+
+.main p {
+  margin: 0 0 1.5em;
+}
+
+.page-content {
+  max-width: 767px;
+}
+
+.page-header {
+  margin: 0 0 2.5em;
+}
