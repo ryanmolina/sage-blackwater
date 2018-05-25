@@ -26,83 +26,54 @@
     <div class="row">
       <nav class="nav-primary">
         @if (has_nav_menu('primary_navigation'))
-          {!! wp_nav_menu(['theme_location' => 'primary_navigation', 'menu_class' => 'nav']) !!}
+          {!! wp_nav_menu(['theme_location' => 'primary_navigation', 'menu_class' => 'nav', 'depth' => 2,]) !!}
         @endif
       </nav>
     </div>
   </div>
 </header>
-
 <style>
-
-
-
-.banner .container {
-  border-bottom: 1px solid #4a4a4a; 
+.nav-primary {
+  font-size: 87%;
+  border-bottom: 1px solid #4a4a4a;
+  padding: 0;
   margin-bottom: 16px;
+  width: 100%;
 }
 
-.site-brand img{
-  max-height: 60px;
-  max-width: 100%;
-  transform: translateY(25%);
-}
-
-.site-meta {
-  padding: 15px;
-}
-
-.social-icons li {
-  float: left;
-}
-
-.social-icons {
-  float: right;
-  margin-bottom: 16px;
-}
-
-.site-contact {
-  float: right;
-  text-align: right;
-  clear: both;
-  text-transform: uppercase;
-  letter-spacing: .18em;
-  font-size: 12px;
-}
-
-.banner {
-  margin: 0 auto;
-}
-
-.nav-primary > ul > li {
+.nav-primary > .nav > li {
   display: inline-block;
 }
-.nav-primary > ul > li:first-child {
+.nav-primary > .nav > li:first-child {
   border-top-left-radius: 20px;
   border-bottom-left-radius: 20px;
 }
-.nav-primary > ul > li:last-child {
+.nav-primary > .nav > li:last-child {
   border-top-right-radius: 20px;
   border-bottom-right-radius: 20px;
 }
-.nav-primary ul > li:hover {
+.nav-primary .nav > li:hover {
   background: #f5f5f5;
 }
-.nav-primary ul ul > li:hover {
+.nav-primary .nav .sub-menu > li:hover {
   background: white;
 }
-.nav-primary ul li a {
+.nav-primary .menu-item a {
   color: black;
   display: block;
-  padding-left: 0;
-  padding-right: 40px;
+  padding: 8px 10px 8px 10px;
   text-transform: uppercase;
   text-decoration: none;
   letter-spacing: .15em;
   transition-duration: .3s;
   text-shadow: 1px 1px 1px rgba(255,255,255,.6);
 }
-.nav-primary ul ul {
+
+.nav-primary .menu-item:first-child a {
+  padding-left: 0;
+}
+
+.nav-primary .sub-menu {
   /*style all lists below the top-level list*/
   background: #f5f5f5;
   border: 1px solid #ccc;
@@ -115,10 +86,10 @@
   z-index: 10;
   visibility: hidden;
 }
-.nav-primary ul ul li {
+.nav-primary .nav .sub-menu li {
   position: relative;
 }
-.nav-primary ul ul ul {
+.nav-primary .nav .sub-menu ul {
   /*style all lists below the second-level list*/
   border: 1px solid #ccc;
   border-right: none;
@@ -131,39 +102,5 @@
 .nav-primary li:hover > ul {
   /*show the menu of the list item being hovered over*/
   visibility: visible;
-}
- {
-  font-size: 87%;
-  border-bottom: 1px solid #4a4a4a;
-  padding: 0;
-  margin-bottom: 16px;
-}
-
-@media (max-width: 575px) {
-  .site-meta .social-icons,
-  .site-meta .site-contact {
-    text-align: center;
-  }
-  .site-meta .social-icons {
-    float: none;
-  }
-
-  .social-icons li {
-    float: none;
-    display: inline;
-  }
-}
-
-@media (max-width: 767px) {
-
-}
-
-
-@media (max-width: 991px) {
-
-}
-
-@media (max-width: 1199px) {
-
 }
 </style>

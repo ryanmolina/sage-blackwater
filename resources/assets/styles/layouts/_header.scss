@@ -1,7 +1,52 @@
-.banner .nav li {
-  @extend .nav-item;
+.banner {
+  margin: 0 auto;
+
+  .site-meta {
+    padding: 15px;
+
+    .site-contact {
+      float: right;
+      text-align: right;
+      clear: both;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      font-size: 12px;
+    }
+  }
+
+  .site-brand img {
+    max-height: 60px;
+    max-width: 100%;
+    transform: translateY(25%);
+  }
+
+  @media (max-width: 991px) {
+    .site-brand {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 16px;
+    }
+
+    .site-meta {
+      .site-contact,
+      .social-icons {
+        text-align: center;
+        float: none;
+
+        li {
+          float: none;
+          display: inline;
+        }
+      }
+    }
+  }
 }
 
-.banner .nav a {
-  @extend .nav-link;
+.social-icons {
+  float: right;
+  margin-bottom: 16px;
+
+  li {
+    float: left;
+  }
 }
