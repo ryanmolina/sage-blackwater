@@ -30,4 +30,10 @@ class App extends Controller
         }
         return get_the_title();
     }
+
+    public static function logo()
+    {
+        $logo = get_theme_mod('theme_header_logo') ?? 'http: //via.placeholder.com/350x150';
+        return $logo;
+    }
 }

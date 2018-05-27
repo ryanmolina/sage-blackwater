@@ -1,7 +1,7 @@
 <header class="banner">
   <div class="container">
     <div class="row">
-      <a class="site-brand col-lg-6" href="{{ home_url('/') }}"><img src="https://blackwatercottage.hotelpropeller.com/files/2012/07/Blackwater-Web-Logo-Temp.jpg"></a>
+      <a class="site-brand col-lg-6" href="{{ home_url('/') }}"><img src="{{ App::logo() }}"></a>
 
       <div class="site-meta col-lg-6">
         <ul class="social-icons">
