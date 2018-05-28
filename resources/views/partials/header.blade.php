@@ -5,19 +5,22 @@
 
       <div class="site-meta col-lg-6">
         <ul class="social-icons">
-          <li><img src="https://www.blackwatercottagebandb.co.uk/wp-content/themes/slate/images/social-icon-twitter.png"></li>
-          <li><img src="https://www.blackwatercottagebandb.co.uk/wp-content/themes/slate/images/social-icon-facebook.png"></li>
-          <li><img src="https://www.blackwatercottagebandb.co.uk/wp-content/themes/slate/images/social-icon-tripadvisor.png"></li>
+          @php
+          $social_icons = json_decode(get_theme_mod('theme_header_social-icons'));
+          @endphp
+          @foreach($social_icons as $icon)
+            <li><a href="{{ $icon->href }}"><img src="{{ $icon->image_url }}"></a></li>
+          @endforeach
         </ul>
 
         <div class="site-contact">
           <address class="site-address">
             <span><i class="fa fa-address-card"></i></span>
-            "Blackwater Cottage, Blackwater, Somerset, TA20 3LE"
+            {{ get_theme_mod('theme_header_address') }}
           </address>
           <div class="site-phone">
             <span><i class="fa fa-phone"></i></span>
-            "01460 234228"
+            {{ get_theme_mod('theme_header_phone') }}
           </div>
         </div>
 

@@ -7,9 +7,6 @@
     "customizer": [
       "./scripts/customizer.js"
     ],
-    "customizerControl": [
-      "./scripts/general-customizer-control.js"
-    ],
     "admin": [
       "./scripts/admin.js"
     ]

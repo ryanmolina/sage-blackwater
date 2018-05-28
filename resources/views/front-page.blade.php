@@ -1,11 +1,15 @@
 @extends('layouts.app')
 @section('content')
+  @php
+  $carousel_items = json_decode(get_theme_mod('theme_front_page_carousel-items'));
+  @endphp
+  @if($carousel_items)
   <div class="owl-carousel owl-theme">
-      <div class="item"><img src="https://blackwatercottage.hotelpropeller.com/files/2013/08/Tea1-938x349.jpg"></div>
-      <div class="item"><img src="https://blackwatercottage.hotelpropeller.com/files/2013/08/Flowers1-938x349.jpg"></div>
-      <div class="item"><img src="https://blackwatercottage.hotelpropeller.com/files/2013/08/Tea1-938x349.jpg"></div>
-      <div class="item"><img src="https://blackwatercottage.hotelpropeller.com/files/2013/08/Bed-938x349.jpg"></div>
+    @foreach($carousel_items as $item)
+      <div class="item"><img src="{{ $item->image_url }}"></div>
+    @endforeach
   </div>
+  @endif
   <div class="front-page-intro">
     <div class="row">
       <div class="col-md-8">
@@ -54,9 +58,19 @@
   </div>
   <script>
     $('.owl-carousel').owlCarousel({
-    loop:true,
-    autoWidth:true,
-    items:1
+      loop:true,
+      autoWidth:true,
+      items:1
     });
   </script>
+  <style>
+    .owl-carousel .item{
+      height:285px;
+      width:100%;
+    }
+    .owl-carousel .item img {
+      width: 100%;
+      zoom: 1.2;
+    }
+  </style>
 @endsection

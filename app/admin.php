@@ -21,12 +21,6 @@ add_action('customize_register', function (\WP_Customize_Manager $wp_customize) 
  */
 add_action('customize_preview_init', function () {
     wp_enqueue_script('sage/customizer.js', asset_path('scripts/customizer.js'), ['customize-preview'], null, true);
-    wp_enqueue_script('sage/general-customizer-control.js', asset_path('scripts/general-customizer-control.js', ['jquery', 'jquery-ui-draggable'], null, true));
-});
-
-add_action('customize_controls_enqueue_scripts', function () {
-    wp_enqueue_script('sage/customizer.js', asset_path('scripts/customizer.js'), ['customize-preview'], null, true);
-    wp_enqueue_script('sage/general-customizer-control.js', asset_path('scripts/general-customizer-control.js', ['jquery', 'jquery-ui-draggable'], null, true));
 });
 
 /**

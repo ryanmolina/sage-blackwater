@@ -8,8 +8,6 @@ class GeneralCustomizeControl extends \WP_Customize_Control {
 
     public $customizer_image_control = false;
 
-    public $customizer_icon_control = false;
-
     public $customizer_title_control = false;
 
     public $customizer_subtitle_control = false;
@@ -20,7 +18,9 @@ class GeneralCustomizeControl extends \WP_Customize_Control {
 
     public $customizer_shortcode_control = false;
 
-    public $customizer_socials_repeater_control = false;
+    public $customizer_control_repeatable = false;
+
+    public $customizer_control_sortable = false;
 
     public $customizer_title = 'Click me';
 
@@ -29,9 +29,6 @@ class GeneralCustomizeControl extends \WP_Customize_Control {
         $this->customizer_title = $title;
         if ( ! empty( $args['customizer_image_control'] ) ) {
             $this->customizer_image_control = $args['customizer_image_control'];
-        }
-        if ( ! empty( $args['customizer_icon_control'] ) ) {
-            $this->customizer_icon_control = $args['customizer_icon_control'];
         }
         if ( ! empty( $args['customizer_title_control'] ) ) {
             $this->customizer_title_control = $args['customizer_title_control'];
@@ -47,9 +44,6 @@ class GeneralCustomizeControl extends \WP_Customize_Control {
         }
         if ( ! empty( $args['customizer_shortcode_control'] ) ) {
             $this->customizer_shortcode_control = $args['customizer_shortcode_control'];
-        }
-        if ( ! empty( $args['customizer_socials_repeater_control'] ) ) {
-            $this->customizer_socials_repeater_control = $args['customizer_socials_repeater_control'];
         }
         if ( ! empty( $args['section'] ) ) {
             $this->id = $args['section'];
@@ -68,7 +62,7 @@ class GeneralCustomizeControl extends \WP_Customize_Control {
         if ( ! is_array( $json ) ) {
             $json = array( $values );
         } ?>
-        
+
         <span class="customize-control-title"><?php echo esc_html( $this->label ); ?></span>
         <div class="customizer_general_control_repeater customizer_general_control_droppable">
             <?php
@@ -89,29 +83,10 @@ class GeneralCustomizeControl extends \WP_Customize_Control {
             } ?>
         </div>
 
-        <button type="button" class="button add_field customizer_general_control_new_field">Add new field</button>
+        <button type="button"   class="button add_field customizer_general_control_new_field">
+            <?php esc_html_e( 'Add new field' ); ?>
+        </button>
 
-        <?php
-    }
-
-
-    /**
-     * Icon picker input
-     *
-     * @param string $value Value of this input.
-     * @param string $show Option to show or hide this.
-     */
-    private function icon_picker_control( $value = '', $show = '' ) {
-        ?>
-        <div class="customizer_general_control_icon" <?php if ( $show === 'customizer_image' ) { echo 'style="display:none;"'; } ?>>
-			<span class="customize-control-title">
-                Icon
-			</span>
-            <div class="input-group icp-container">
-                <input data-placement="bottomRight" class="icp icp-auto" value="<?php echo esc_attr( $value ); ?>" type="text">
-                <span class="input-group-addon"></span>
-            </div>
-        </div>
         <?php
     }
 
@@ -123,31 +98,13 @@ class GeneralCustomizeControl extends \WP_Customize_Control {
      */
     private function image_control( $value = '', $show = '' ) {
         ?>
-        <p class="customizer_image_control" <?php if ( $show === 'customizer_icon' ) { echo 'style="display:none;"'; } ?>>
+        <p class="customizer_image_control">
 			<span class="customize-control-title">
-                Image
+				<?php esc_html_e( 'Image' )?>
 			</span>
             <input type="text" class="widefat custom_media_url" value="<?php echo esc_attr( $value ); ?>">
-            <input type="button" class="button button-primary custom_media_button_customizer" value="Upload Image" />
+            <input type="button" class="button button-primary custom_media_button_customizer" value="<?php esc_html_e( 'Upload Image' ); ?>" />
         </p>
-        <?php
-    }
-
-    /**
-     * Switch between icon and image input
-     *
-     * @param string $value Value of this input.
-     */
-    private function icon_type_choice( $value = 'customizer_icon' ) {
-        ?>
-        <span class="customize-control-title">
-            Image type
-		</span>
-        <select class="customizer_image_choice">
-            <option value="customizer_icon" <?php selected( $value,'customizer_icon' );?>>Icon</option>
-            <option value="customizer_image" <?php selected( $value,'customizer_image' );?>>Image</option>
-            <option value="customizer_none" <?php selected( $value,'customizer_none' );?>>None</option>
-        </select>
         <?php
     }
 
@@ -171,74 +128,6 @@ class GeneralCustomizeControl extends \WP_Customize_Control {
     }
 
 
-    /**
-     * Repeater control.
-     *
-     * @param string $value Value of this input.
-     */
-    private function repeater_control( $value = '' ) {
-        $social_repeater = array();
-        $show_del        = 0; ?>
-        <span class="customize-control-title">Repeater Control</span>
-        <?php
-        if ( ! empty( $value ) ) {
-            $social_repeater = json_decode( html_entity_decode( $value ), true );
-        }
-        if ( ( count( $social_repeater ) == 1 && '' === $social_repeater[0] ) || empty( $social_repeater ) ) { ?>
-            <div class="customizer-social-repeater">
-                <div class="customizer-social-repeater-container">
-                    <div class="customizer-repeater-rc input-group icp-container">
-                        <input data-placement="bottomRight" class="icp icp-auto" value="<?php echo esc_attr( $value ); ?>" type="text">
-                        <span class="input-group-addon"></span>
-                    </div>
-
-                    <input type="text" class="customizer_social_repeater_link"
-                           placeholder="Placeholder text">
-                    <input type="hidden" class="customizer_social_repeater_id" value="">
-                    <button class="customizer_remove_social_item" style="display:none">
-                        X
-                    </button>
-                </div>
-                <input type="hidden" id="customizer_socials_repeater_colector" class="customizer_socials_repeater_colector" value=""/>
-            </div>
-            <button class="customizer_add_social_item">Add Icon</button>
-            <?php
-        } else { ?>
-            <div class="customizer-social-repeater">
-                <?php
-                foreach ( $social_repeater as $social_icon ) {
-                    $show_del ++; ?>
-                    <div class="customizer-social-repeater-container">
-                        <div class="customizer-repeater-rc input-group icp-container">
-                            <input data-placement="bottomRight" class="icp icp-auto" value="<?php echo esc_attr( $social_icon['icon'] ); ?>" type="text">
-                            <span class="input-group-addon"></span>
-                        </div>
-                        <input type="text" class="customizer_social_repeater_link"
-                               placeholder="Placeholder text"
-                               value="<?php if ( ! empty( $social_icon['link'] ) ) {
-                                   echo esc_url( $social_icon['link'] );
-                               } ?>">
-                        <input type="hidden" class="customizer_social_repeater_id"
-                               value="<?php if ( ! empty( $social_icon['id'] ) ) {
-                                   echo esc_attr( $social_icon['id'] );
-                               } ?>">
-                        <button class="customizer_remove_social_item"
-                                style="<?php if ( $show_del == 1 ) {
-                                    echo 'display:none';
-                                } ?>">X</button>
-                    </div>
-                    <?php
-                } ?>
-                <input type="hidden" id="customizer_socials_repeater_colector"
-                       class="customizer_socials_repeater_colector"
-                       value="<?php echo esc_textarea( html_entity_decode( $value ) ); ?>" />
-            </div>
-            <button class="customizer_add_social_item">Add Icon</button>
-            <?php
-        }// End if().
-    }
-
-
 
     /**
      * Iterate through repeater's content
@@ -248,7 +137,7 @@ class GeneralCustomizeControl extends \WP_Customize_Control {
     private function iterate_array( $array = array() ) {
         $it = 0;
         if ( ! empty( $array ) ) {
-            foreach ( $array as $icon ) {  ?>
+            foreach ( $array as $i ) {  ?>
                 <div class="customizer_general_control_repeater_container customizer_draggable">
                     <div class="customizer-customize-control-title">
                         <?php esc_html_e( $this->customizer_title, 'alps' )?>
@@ -257,45 +146,33 @@ class GeneralCustomizeControl extends \WP_Customize_Control {
                         <?php
                         $choice = $image_url = $icon_value = $title = $subtitle = $text = $link = $shortcode = $repeater = '';
 
-                        if ( ! empty( $icon->choice ) ) {
-                            $choice = $icon->choice;
-                        }
-                        if ( ! empty( $icon->image_url ) ) {
-                            $image_url = $icon->image_url;
-                        }
-                        if ( ! empty( $icon->icon_value ) ) {
-                            $icon_value = $icon->icon_value;
-                        }
-                        if ( ! empty( $icon->title ) ) {
-                            $title = $icon->title;
-                        }
-                        if ( ! empty( $icon->subtitle ) ) {
-                            $subtitle = $icon->subtitle;
-                        }
-                        if ( ! empty( $icon->text ) ) {
-                            $text = $icon->text;
-                        }
-                        if ( ! empty( $icon->link ) ) {
-                            $link = $icon->link;
-                        }
-                        if ( ! empty( $icon->shortcode ) ) {
-                            $shortcode = $icon->shortcode;
-                        }
-                        if ( ! empty( $icon->social_repeater ) ) {
-                            $repeater = $icon->social_repeater;
+                        if ( ! empty( $i->image_url ) ) {
+                            $image_url = $i->image_url;
                         }
 
-                        if ( $this->customizer_image_control == true && $this->customizer_icon_control == true ) {
-
-                            $this->icon_type_choice( $choice );
+                        if ( ! empty( $i->title ) ) {
+                            $title = $i->title;
                         }
+
+                        if ( ! empty( $i->subtitle ) ) {
+                            $subtitle = $i->subtitle;
+                        }
+
+                        if ( ! empty( $i->text ) ) {
+                            $text = $i->text;
+                        }
+
+                        if ( ! empty( $i->link ) ) {
+                            $link = $i->link;
+                        }
+
+                        if ( ! empty( $i->shortcode ) ) {
+                            $shortcode = $i->shortcode;
+                        }
+
 
                         if ( $this->customizer_image_control == true ) {
                             $this->image_control( $image_url, $choice );
-                        }
-
-                        if ( $this->customizer_icon_control == true ) {
-                            $this->icon_picker_control( $icon_value, $choice );
                         }
 
                         if ( $this->customizer_title_control == true ) {
@@ -335,47 +212,39 @@ class GeneralCustomizeControl extends \WP_Customize_Control {
                             ), $shortcode);
                         }
 
-                        if ( $this->customizer_socials_repeater_control == true ) {
-                            $this->repeater_control( $repeater );
-                        } ?>
-                        <input type="hidden" class="customizer_box_id" value="<?php if ( !empty( $icon->id ) ) { echo esc_attr( $icon->id );} ?>">
-                        <button type="button" class="customizer_general_control_remove_field button" <?php if ( $it == 0 ) { echo 'style="display:none;"';} ?>>
-                            Delete field
-                        </button>
+                        ?>
+                        <input type="hidden" class="customizer_box_id" value="<?php if ( ! empty( $i->id ) ) { echo esc_attr( $i->id );} ?>">
+                        <button type="button" class="customizer_general_control_remove_field button" <?php if ( $it == 0 ) { echo 'style="display:none;"';} ?>><?php esc_html_e( 'Delete field' ); ?></button>
                     </div>
                 </div>
 
                 <?php
                 $it++;
-            }// End foreach().
+            }
         } else { ?>
             <div class="customizer_general_control_repeater_container">
-                <div class="customizer-customize-control-title">Customizer Title</div>
+                <div class="customizer-customize-control-title">Click Me</div>
                 <div class="customizer-box-content-hidden">
                     <?php
-                    if ( $this->customizer_image_control == true && $this->customizer_icon_control == true ) {
-                        $this->icon_type_choice();
-                    }
 
                     if ( $this->customizer_image_control == true ) {
                         $this->image_control( '','customizer_icon' );
                     }
 
-                    if ( $this->customizer_icon_control == true ) {
-                        $this->icon_picker_control();
-                    }
                     if ( $this->customizer_title_control == true ) {
                         $this->input_control( array(
                             'label' => __( 'Title', 'alps' ),
                             'class' => 'customizer_title_control',
                         ) );
                     }
+
                     if ( $this->customizer_subtitle_control == true ) {
                         $this->input_control( array(
                             'label' => __( 'Subtitle', 'alps' ),
                             'class' => 'customizer_subtitle_control',
                         ) );
                     }
+
                     if ( $this->customizer_text_control == true ) {
                         $this->input_control( array(
                             'label' => __( 'Text', 'alps' ),
@@ -383,31 +252,39 @@ class GeneralCustomizeControl extends \WP_Customize_Control {
                             'type'  => 'textarea',
                         ) );
                     }
+
                     if ( $this->customizer_link_control == true ) {
                         $this->input_control( array(
                             'label' => __( 'Link', 'alps' ),
                             'class' => 'customizer_link_control',
                         ) );
                     }
+
                     if ( $this->customizer_shortcode_control == true ) {
                         $this->input_control( array(
                             'label' => __( 'Shortcode', 'alps' ),
                             'class' => 'customizer_shortcode_control',
                         ) );
                     }
-                    if ( $this->customizer_shortcode_control == true ) {
-                        $this->repeater_control();
-                    }
+
                     ?>
                     <input type="hidden" class="customizer_box_id">
-                    <button type="button"
-                            class="customizer_general_control_remove_field button"
-                            style="display:none;">
-                            <?php esc_html_e( 'Delete field', 'alps' ); ?>
-                    </button>
+                    <button type="button" class="customizer_general_control_remove_field button"
+                            style="display:none;"><?php esc_html_e( 'Delete field', 'alps' ); ?></button>
                 </div>
             </div>
             <?php
         }// End if().
     }
+
+    /**
+     * Enqueue required scripts and styles.
+     */
+    public function enqueue() {
+        wp_enqueue_script('sage/general-customizer-control.js', get_template_directory_uri() . '/assets/scripts/general-customizer-control.js', ['jquery', 'jquery-ui-draggable'], null, true);
+        wp_enqueue_style('sage/general-customizer-control.css', get_template_directory_uri() . '/assets/styles/general-customizer-control.css', null);
+        wp_enqueue_script('mediaelement');
+    }
+
+
 }

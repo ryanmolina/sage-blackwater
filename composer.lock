@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "1387af18b4df853db96edd5d561c8545",
+    "content-hash": "35dd373097d1f1d9fca606cf0fd7f4ca",
     "packages": [
         {
             "name": "brain/hierarchy",
@@ -639,6 +639,38 @@
             "description": "The Illuminate View package.",
             "homepage": "https://laravel.com",
             "time": "2018-04-03T12:56:35+00:00"
+        },
+        {
+            "name": "lordonez/customizer",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/leoordoneziii/sage-customizer.git",
+                "reference": "259988b1959e3b7a12860df2079f3d987d41559e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/leoordoneziii/sage-customizer/zipball/259988b1959e3b7a12860df2079f3d987d41559e",
+                "reference": "259988b1959e3b7a12860df2079f3d987d41559e",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "IBX\\Customizer\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "authors": [
+                {
+                    "name": "Leo Ordonez III",
+                    "email": "leo.or@ibinex.tech"
+                }
+            ],
+            "time": "2018-05-25T09:28:59+00:00"
         },
         {
             "name": "nesbot/carbon",
@@ -1535,7 +1567,8 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "soberwp/controller": 10
+        "soberwp/controller": 10,
+        "lordonez/customizer": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

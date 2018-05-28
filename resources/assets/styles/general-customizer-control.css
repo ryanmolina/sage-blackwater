@@ -1,0 +1,57 @@
+.customize-control-title {
+  color: #00a0d2;
+}
+
+.customizer_repeater_container .customizer-box-content-hidden,
+.customizer_general_control_repeater_container .customizer-box-content-hidden {
+  padding: 5px;
+  padding-top: 0;
+  border: 1px solid #dfdfdf;
+  border-top: 0
+}
+
+button.customizer_general_control_remove_field {
+  width: 100%;
+  margin-top: 10px!important
+}
+
+button.customizer_general_control_remove_field:hover {
+  border: 0;
+  color: #fff!important;
+  background-color: #00a0d2!important
+}
+
+.customizer_repeater_container .customizer_icon_link,
+.customizer_general_control_repeater_container .customizer_text_control,
+.customizer_general_control_repeater_container .customizer_link_control {
+  width: 100% !important;
+  margin: 3px 0 0!important
+}
+
+#customizer_new_field,
+#customizer_general_control_new_field {
+  width: 100%
+}
+
+.customizer_general_control_repeater_container .customizer-box-content-hidden {
+  display: none
+}
+
+.customizer-box-content-hidden {
+  background-color: #fff
+}
+
+.customizer-customize-control-title {
+  overflow: hidden;
+  height: 40px;
+  background-color: #fff;
+  border: 1px solid #dfdfdf;
+  font-weight: 700;
+  line-height: 40px !important;
+  text-align: center
+}
+
+.customizer-customize-control-title:hover {
+  border-color: #999;
+  cursor: pointer;
+}
