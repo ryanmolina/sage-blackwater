@@ -176,6 +176,60 @@ function show_upload_image_meta_box()
           </div>';
 }
 
+$custom_repeatable_datepicker = array(
+	array(
+		'label' => 'Dates for (AM) class',
+		'desc'  => 'Pick a date',
+		'id'    => 'course_day_schedule',
+		'type'  => 'repeatable_datepicker'
+	),
+	array(
+		'label' => 'Dates (PM) class',
+		'desc'  => 'Pick a date',
+		'id'    => 'course_night_schedule',
+		'type'  => 'repeatable_datepicker'
+	)
+);
+
+function show_public_course_custom_fields () {
+	global $custom_repeatable_datepicker, $post;
+	echo '<input type="hidden" name="custom_meta_box_nonce" value="'.wp_create_nonce(basename(__FILE__)).'" />';
+	// Begin the field table and loop
+	echo '<table class="form-table">';
+	foreach ($custom_repeatable_datepicker as $field) {
+		// get value of this field if it exists for this post
+		$meta = get_post_meta($post->ID, $field['id'], true);
+		if(!empty($meta)) {
+			$meta = array_filter($meta, 'blank_filter');
+		}
+		// begin a table row with
+		echo '<tr>
+			<th><label for="'.$field['id'].'">'.$field['label'].'</label></th>
+			<td>';
+			switch($field['type']) {
+				case 'repeatable_datepicker':
+					echo '<a class="repeatable-add button" href="#">Add</a>
+							<ul id="'.$field['id'].'-repeatable" class="custom_repeatable">';
+					$i = 0;
+					if ($meta) :
+						foreach($meta as $row) :
+							echo '<li><input type="text" class="datepicker" name="'.$field['id'].'['.$i.']" id="'.$field['id'].'['.$i.']" value="'.$row.'" size="30" />
+									<a class="repeatable-remove button" href="#">Delete</a></li>';
+							$i++;
+						endforeach;
+					else :
+						echo '<li><input type="text" class="datepicker" name="'.$field['id'].'['.$i.']" id="'.$field['id'].'['.$i.']" value="" size="30" />
+									<a class="repeatable-remove button" href="#">Delete</a></li>';
+					endif;
+					echo '</ul>
+						<span class="description">'.$field['desc'].'</span>';
+				break;
+			}
+		echo '</td></tr>';
+	} // end foreach
+	echo '</table>'; // end table
+}
+
 add_action('add_meta_boxes', function () {
     add_meta_box(
         'cottage-upload_image',
@@ -183,7 +237,27 @@ add_action('add_meta_boxes', function () {
         'show_upload_image_meta_box',
         'cottage'
     );
+    add_meta_box(
+		'public-course_repeatable_datepicker',
+		'Dates',
+		'show_public_course_custom_fields',
+		'cottage'
+	);
 });
+
+function blank_filter($item) {
+	date_default_timezone_set('Asia/Manila');
+	try {
+		$event_date = new DateTime($item. ', 12:00 am');
+	} catch (Exception $e) {
+		return false;
+	}
+	$now = new DateTime();
+	if($item === '' || ($event_date < $now)) {
+		return false;
+	}
+	return true;
+}
 
 function save_cottage($post_id)
 {
@@ -211,6 +285,7 @@ function save_cottage($post_id)
         return $post_id;
     }
     save_custom_meta_data($post_id, 'upload_image');
+    save_custom_meta_data($post_id, 'course_day_schedule-repeatable');
 }
 add_action('save_post', 'save_cottage');
 
