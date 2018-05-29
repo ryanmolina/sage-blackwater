@@ -20,7 +20,7 @@
           </address>
           <div class="site-phone">
             <span><i class="fa fa-phone"></i></span>
-            {{ get_theme_mod('theme_header_phone') }}
+            {{ get_theme_mod('theme_header_phone')}}
           </div>
         </div>
 
